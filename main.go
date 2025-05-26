@@ -1,10 +1,65 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/rand"
+	"net/http"
+	"sync"
 	"time"
 )
+
+var league *League
+var mu sync.Mutex
+
+func playAllHandler(w http.ResponseWriter, r *http.Request) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	if league.Week >= league.TotalWeeks {
+		http.Error(w, "Ligde oynanacak hafta kalmadı", http.StatusBadRequest)
+		return
+	}
+
+	league.PlayAllWeeks()
+
+	resp := map[string]interface{}{
+		"message": "Tüm lig maçları oynandı",
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(resp)
+}
+
+func playWeekHandler(w http.ResponseWriter, r *http.Request) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	if league.Week >= league.TotalWeeks {
+		http.Error(w, "Ligde oynanacak hafta kalmadı", http.StatusBadRequest)
+		return
+	}
+
+	league.PlayWeek()
+
+	resp := map[string]interface{}{
+		"week":    league.Week,
+		"message": "Hafta oynandı",
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(resp)
+}
+
+func tableHandler(w http.ResponseWriter, r *http.Request) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	table := league.GetTable()
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(table)
+}
 
 // --- Interface tanımları ---
 
@@ -113,9 +168,16 @@ func (m *Match) GetResult() (int, int) {
 }
 
 type League struct {
-	Teams   []TeamInterface
-	Matches []MatchInterface
-	Week    int
+	Teams      []TeamInterface
+	Matches    []MatchInterface
+	Week       int
+	TotalWeeks int
+}
+
+func (l *League) PlayAllWeeks() {
+	for l.Week < l.TotalWeeks {
+		l.PlayWeek()
+	}
 }
 
 func (l *League) PlayWeek() {
@@ -159,19 +221,18 @@ func main() {
 		&Match{Home: teams[1], Away: teams[2]},
 	}
 
-	league := &League{
-		Teams:   teams,
-		Matches: matches,
-		Week:    0,
+	league = &League{
+		Teams:      teams,
+		Matches:    matches,
+		Week:       0,
+		TotalWeeks: len(matches) / 2,
 	}
 
-	for i := 0; i < 3; i++ {
-		league.PlayWeek()
-		fmt.Println()
-	}
+	http.HandleFunc("/playweek", playWeekHandler)
+	http.HandleFunc("/table", tableHandler)
+	http.HandleFunc("/playall", playAllHandler) // Bunu buraya al
 
-	fmt.Println("Lig Tablosu:")
-	for _, team := range league.GetTable() {
-		fmt.Println(team.GetStats())
-	}
+	fmt.Println("Server 8080 portunda başladı...")
+	http.ListenAndServe(":8080", nil)
+
 }
