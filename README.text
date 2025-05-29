@@ -20,5 +20,6 @@ Bu proje, dört takımdan oluşan bir futbol ligi simülasyonudur. Her takımın
 
 ```powershell
 $env:CGO_ENABLED="1"
-$env:CC="C:\Users\Alihan\Desktop\mingw64\bin\gcc.exe"
+$env:CC="C:\KENDI_YOLUNUZ\mingw64\bin\gcc.exe" (path olarak kendi bilgisayarınızdaki pathi seçmelisiniz)
 go run main.go
+
