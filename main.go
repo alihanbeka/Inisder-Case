@@ -367,29 +367,29 @@ func (l *League) GetTable() []TeamInterface {
 	return l.Teams
 }
 
-func generateFixtures(teams []Team) []Match {
+func generateFixtures(teams []TeamInterface) []Match {
 	var fixtures []Match
 	n := len(teams)
 	if n%2 != 0 {
-		teams = append(teams, Team{Name: "BYE"})
-		n++
+		return fixtures
 	}
 	totalWeeks := n - 1
 	matchesPerWeek := n / 2
+
 	for week := 0; week < totalWeeks; week++ {
 		for i := 0; i < matchesPerWeek; i++ {
 			home := teams[i]
 			away := teams[n-1-i]
-			fixtures = append(fixtures, Match{Home: &home, Away: &away})
+			fixtures = append(fixtures, Match{Home: home, Away: away})
 		}
-		teams = rotateTeams(teams)
+		teams = rotateTeamInterfaces(teams)
 	}
 	return fixtures
 }
 
-func rotateTeams(teams []Team) []Team {
+func rotateTeamInterfaces(teams []TeamInterface) []TeamInterface {
 	n := len(teams)
-	newOrder := make([]Team, n)
+	newOrder := make([]TeamInterface, n)
 	newOrder[0] = teams[0]
 	for i := 1; i < n-1; i++ {
 		newOrder[i] = teams[i+1]
@@ -429,7 +429,8 @@ func main() {
 	}
 
 	// Fikstür oluştur
-	rawMatches := generateFixtures(teamStructs)
+	rawMatches := generateFixtures(teamInterfaces)
+
 	var matches []MatchInterface
 	week := 1
 	for _, m := range rawMatches {
