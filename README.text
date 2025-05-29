@@ -5,21 +5,35 @@ Bu proje, dört takımdan oluşan bir futbol ligi simülasyonudur. Her takımın
 ## Gereksinimler
 
 - Go (1.18 veya üzeri)
-- Git (isteğe bağlı)
 - Windows işletim sistemi
 - GCC derleyicisi (MinGW-w64 önerilir)
 
 ## Kurulum
 
-1. Go yüklü değilse: [https://go.dev/dl/](https://go.dev/dl/)
-2. MinGW-w64 indir: [https://winlibs.com/](https://winlibs.com/)
-   - İndirirken `POSIX threads`, `x86_64`, `UCRT` destekli olanı tercih et.
-   - İndirdikten sonra `bin` klasörünün yolunu not al (örnek: `C:\Users\Alihan\Desktop\mingw64\bin`).
+### 1. Go Yükleme
 
-3. Bu yolu PowerShell'de kullanmak için aşağıdaki komutları çalıştır:
+Go yüklü değilse şu adresten indirip kurabilirsiniz:  
+[https://go.dev/dl/](https://go.dev/dl/)
+
+### 2. MinGW-w64 (GCC) Kurulumu
+
+MinGW-w64 derleyicisini şu adresten indirip kurun:  
+[https://winlibs.com/](https://winlibs.com/)
+
+Kurulum sırasında şu seçenekleri tercih edin:
+
+- POSIX threads
+- x86_64
+- UCRT
+
+Kurulumdan sonra `mingw64\bin` klasörünün tam yolunu bir yere not alın.  
+**Örnek:** `C:\Users\KULLANICI_ADI\mingw64\bin`
+
+### 3. Projeyi Çalıştırma
+
+Proje dizininde PowerShell’i açın ve aşağıdaki komutları sırasıyla girin:
 
 ```powershell
 $env:CGO_ENABLED="1"
-$env:CC="C:\KENDI_YOLUNUZ\mingw64\bin\gcc.exe" (path olarak kendi bilgisayarınızdaki pathi seçmelisiniz)
+$env:CC="C:\KENDI_YOLUNUZ\mingw64\bin\gcc.exe"
 go run main.go
-
