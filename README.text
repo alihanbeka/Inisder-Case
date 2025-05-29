@@ -1,0 +1,24 @@
+# Futbol Ligi Simülasyonu (Go + SQLite)
+
+Bu proje, dört takımdan oluşan bir futbol ligi simülasyonudur. Her takımın bir "gücü" vardır ve maçlar bu güce göre rastgele simüle edilir. Her hafta iki maç yapılır ve puan durumu güncellenir. API üzerinden lig tablosu, haftalık maçlar, maç sonucu güncellemeleri gibi işlemler yapılabilir.
+
+## Gereksinimler
+
+- Go (1.18 veya üzeri)
+- Git (isteğe bağlı)
+- Windows işletim sistemi
+- GCC derleyicisi (MinGW-w64 önerilir)
+
+## Kurulum
+
+1. Go yüklü değilse: [https://go.dev/dl/](https://go.dev/dl/)
+2. MinGW-w64 indir: [https://winlibs.com/](https://winlibs.com/)
+   - İndirirken `POSIX threads`, `x86_64`, `UCRT` destekli olanı tercih et.
+   - İndirdikten sonra `bin` klasörünün yolunu not al (örnek: `C:\Users\Alihan\Desktop\mingw64\bin`).
+
+3. Bu yolu PowerShell'de kullanmak için aşağıdaki komutları çalıştır:
+
+```powershell
+$env:CGO_ENABLED="1"
+$env:CC="C:\Users\Alihan\Desktop\mingw64\bin\gcc.exe"
+go run main.go
