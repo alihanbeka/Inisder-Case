@@ -37,3 +37,8 @@ Proje dizininde PowerShell’i açın ve aşağıdaki komutları sırasıyla gir
 $env:CGO_ENABLED="1"
 $env:CC="C:\KENDI_YOLUNUZ\mingw64\bin\gcc.exe"
 go run main.go
+
+
+## Teşekkürler 
+
+Bu teknik değerlendirme sürecini bana sunarak hem kendimi ifade etme hem de yeteneklerimi gösterme fırsatı verdiğiniz için teşekkür ederim. Bu tarz bir çalışma üzerinde düşünmek ve üretmek benim için oldukça öğretici ve keyifliydi.
